@@ -39,14 +39,4 @@ export const validatedAuthProvider = {...authProvider, checkAuth: async ()=>{
   else{
     return Promise.reject();
   }
-
-  // firebase.auth()
-  // .then((idTokenResult)=>{
-  //   if(!idTokenResult.claims.isAdmin){
-  //     return Promise.reject();
-  //   }
-  //   else{
-  //     return Promise.resolve(firebase.auth().currentUser);
-  //   }
-  // })
 }}
