@@ -1,5 +1,5 @@
 import { FirebaseAuthProvider, FirebaseDataProvider, } from 'react-admin-firebase';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 
   
@@ -18,7 +18,7 @@ const config = {
 const options = {}
 
 export const dataProvider = FirebaseDataProvider(config, options);
-const authProvider = FirebaseAuthProvider(config);
+export const authProvider = FirebaseAuthProvider(config);
 
 export const validatedAuthProvider = {...authProvider, checkAuth: async ()=>{
   let auth = firebase.auth();

@@ -1,9 +1,7 @@
 import React from "react";
 import { Login, LoginForm } from "react-admin";
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
-
 
 
 

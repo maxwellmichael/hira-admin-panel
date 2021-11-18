@@ -1,76 +1,60 @@
 import React from 'react';
-import {List, Datagrid, TextField, EditButton, DeleteButton, ShowButton, Show, SimpleShowLayout, ArrayField, Edit, SimpleForm, TextInput, RadioButtonGroupInput, NumberInput, ArrayInput, SimpleFormIterator, Create, ImageInput, ImageField, AutocompleteInput} from 'react-admin';
+import { ReferenceField, ReferenceArrayInput, ReferenceInput,SelectInput, List, Datagrid, TextField, EditButton, DeleteButton, ShowButton, Show, SimpleShowLayout, ArrayField, Edit, SimpleForm, TextInput, RadioButtonGroupInput, NumberInput, ArrayInput, SimpleFormIterator, Create, ImageInput, ImageField } from 'react-admin';
 
 
 
 
-const materialChoices = [
-    { id: 'Cotton Fabric', name: 'Cotton Fabric' },
-    { id: 'Silk Fabric', name: 'Silk Fabric' },
-    { id: 'Linen Fabric', name: 'Linen Fabric' },
-    { id: 'Wool Fabric', name: 'Wool Fabric' },
-    { id: 'Leather Material', name: 'Leather Material' },
-    { id: 'Georgette Fabric', name: 'Georgette Fabric' },
-    { id: 'Chiffon Fabric', name: 'Chiffon Fabric' },
-    { id: 'Nylon Fabric', name: 'Nylon Fabric' },
-    { id: 'Polyester Fabric', name: 'Polyester Fabric' },
-    { id: 'Velvet Fabric', name: 'Velvet Fabric' },
-    { id: 'Denim Fabric', name: 'Denim Fabric' },
-    { id: 'Rayon Fabric', name: 'Rayon Fabric' },
-    { id: 'Viscose Fabric', name: 'Viscose Fabric' },
-    { id: 'Satin Fabric', name: 'Satin Fabric' },
-    { id: 'Crepe Fabric', name: 'Crepe Fabric' },
-    { id: 'Lycra Fabric', name: 'Lycra Fabric' },
-    { id: 'Net/Lace Fabric', name: 'Net/Lace Fabric' },
-]
 
-const categoryChoices = [
-    { id: 'TOP', name: 'TOP' },
-    { id: 'LONGTOP', name: 'LONGTOP' },
-    { id: 'SHORT TOP', name: 'SHORT TOP' },
-    { id: 'GOUN', name: 'GOUN' },
-    { id: 'MIDI TOP', name: 'MIDI TOP' },
-    { id: 'T SHIRT', name: 'T SHIRT' },
-    { id: 'NIGHT DRESS', name: 'NIGHT DRESS' },
-]
+export const SetList = (props) => {
 
-
-export const SetList = (props)=>{
-
-    return(
+    return (
         <List {...props}>
             <Datagrid>
                 <ImageField source="main_image.src" label='Set Image' title="Main Image" />
                 <TextField source='name' />
-                <TextField source='category' />
+                <ReferenceField label="Category" source="category" reference="categories">
+                    <TextField source="name" />
+                </ReferenceField>
                 <TextField source='gender' />
                 <ShowButton label='' />
                 <EditButton redirect={false} />
-                <DeleteButton redirect={false}/>
+                <DeleteButton redirect={false} />
             </Datagrid>
         </List>
     )
 }
 
-export const SetShow = (props)=>{
+export const SetShow = (props) => {
 
 
-    return(
+    return (
         <Show {...props}>
             <SimpleShowLayout>
                 <TextField source='id' />
                 <TextField source='name' />
-                <TextField source='category' />
                 <TextField source='gender' />
                 <TextField source='selling_price' />
                 <TextField source='maximum_retail_price' />
-                <TextField source='material' />
+                <ReferenceField label="Material" source="material" reference="materials">
+                    <TextField source="name" />
+                </ReferenceField>
+                <ReferenceField label="Category" source="category" reference="categories">
+                    <TextField source="name" />
+                </ReferenceField>
+                <ReferenceField label="Brand" source="brand" reference="brands">
+                    <TextField source="name" />
+                </ReferenceField>
                 <ImageField source="main_image.src" title="Main Image" />
                 <ArrayField source='items'>
                     <Datagrid>
                         <TextField source='color' label='Item Color' />
                         <TextField source='size' label='Item Size' />
                         <ImageField source='image_url.src' label='Item Image' />
+                    </Datagrid>
+                </ArrayField>
+                <ArrayField source='specifications'>
+                    <Datagrid>
+                        <TextField source='specific' />
                     </Datagrid>
                 </ArrayField>
             </SimpleShowLayout>
@@ -85,11 +69,18 @@ export const SetEdit = (props) => (
             <TextInput source="name" />
             <NumberInput source="selling_price" />
             <NumberInput source="maximum_retail_price" />
-            <AutocompleteInput source="material" choices={materialChoices} />
             <ImageInput source="main_image" label="Pictures" accept="image/*">
                 <ImageField source="src" title="title" />
             </ImageInput>
-            <AutocompleteInput source="category" choices={categoryChoices} />
+            <ReferenceInput source="material" reference="materials">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
+            <ReferenceInput source="category" reference="categories">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
+            <ReferenceInput source="brand" reference="brands">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
             <RadioButtonGroupInput source="gender" choices={[
                 { id: 'Male', name: 'Male' },
                 { id: 'Female', name: 'Female' },
@@ -104,6 +95,12 @@ export const SetEdit = (props) => (
                 </SimpleFormIterator>
             </ArrayInput>
 
+            <ArrayInput source="specifications">
+                <SimpleFormIterator>
+                    <TextInput source="specific" label='Specific' />
+                </SimpleFormIterator>
+            </ArrayInput>
+
         </SimpleForm>
     </Edit>
 );
@@ -114,11 +111,18 @@ export const SetCreate = (props) => (
             <TextInput source="name" />
             <NumberInput source="selling_price" />
             <NumberInput source="maximum_retail_price" />
-            <AutocompleteInput source="material" choices={materialChoices} />
             <ImageInput source="main_image" label="Pictures" accept="image/*">
                 <ImageField source="src" title="title" />
             </ImageInput>
-            <AutocompleteInput source="category" choices={categoryChoices} />
+            <ReferenceArrayInput source="category" reference="categories">
+                <SelectInput optionText="name" />
+            </ReferenceArrayInput>
+            <ReferenceArrayInput source="material" reference="materials">
+                <SelectInput optionText="name" />
+            </ReferenceArrayInput>
+            <ReferenceArrayInput source="brand" reference="brands">
+                <SelectInput optionText="name" />
+            </ReferenceArrayInput>
             <RadioButtonGroupInput source="gender" choices={[
                 { id: 'male', name: 'Male' },
                 { id: 'female', name: 'Female' },
@@ -130,6 +134,12 @@ export const SetCreate = (props) => (
                         <ImageField source="src" title="title" />
                     </ImageInput>
                     <TextInput source="size" label="Item Size" />
+                </SimpleFormIterator>
+            </ArrayInput>
+
+            <ArrayInput source="specifications">
+                <SimpleFormIterator>
+                    <TextInput source="specific" label="Specific Name" />
                 </SimpleFormIterator>
             </ArrayInput>
 
